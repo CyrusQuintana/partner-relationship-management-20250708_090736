@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Custom Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body onload="uiComponents.initComponents()">
+  <div class="form-container" id="customForm"></div>
+
+  <script>
+    const uiComponents = (function() {
+      function initComponents() {
+        const formFields = [
+          { label: 'Name', type: 'text', id: 'name' },
+          { label: 'Email', type: 'email', id: 'email' },
+          { label: 'Age', type: 'number', id: 'age' },
+          { label: 'Country', type: 'select', id: 'country', options: ['USA', 'Canada', 'UK'] }
+        ];
+        createCustomForm(formFields);
+        bindEventListeners();
+      }
+
+      function createCustomForm(fields) {
+        const formContainer = document.getElementById('customForm');
+        const form = document.createElement('form');
+
+        fields.forEach(field => {
+          const formGroup = document.createElement('div');
+          formGroup.className = 'form-group';
+
+          const label = document.createElement('label');
+          label.setAttribute('for', field.id);
+          label.textContent = field.label;
+
+          let input;
+          if (field.type === 'select') {
+            input = document.createElement('select');
+            field.options.forEach(option => {
+              const optionElement = document.createElement('option');
+              optionElement.value = option;
+              optionElement.textContent = option;
+              input.appendChild(optionElement);
+            });
+          } else {
+            input = document.createElement('input');
+            input.type = field.type;
+          }
+          input.id = field.id;
+          input.name = field.id;
+
+          formGroup.appendChild(label);
+          formGroup.appendChild(input);
+          form.appendChild(formGroup);
+        });
+
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Submit';
+        form.appendChild(submitButton);
+
+        formContainer.appendChild(form);
+      }
+
+      function bindEventListeners() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          const formData = new FormData(form);
+          const data = {};
+          formData.forEach((value, key) => {
+            data[key] = value;
+          });
+          console.log('Form Data Submitted:', data);
+          renderUI(data);
+        });
+      }
+
+      function renderUI(data) {
+        alert('Form submitted successfully!');
+        console.log('Submitted Data:', data);
+      }
+
+      return {
+        initComponents,
+        createCustomForm,
+        bindEventListeners,
+        renderUI
+      };
+    })();
+  </script>
+</body>
+
+</html>
